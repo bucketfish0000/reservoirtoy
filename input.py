@@ -3,7 +3,7 @@ import torch
 import random
 import matplotlib.pyplot as plt
 
-def lorenz(params=[10,28,8/3],init=[25,25,25], epoch=30000,delta_t=0.001,dimension=3):
+def lorenz(params=[10,28,8/3],init=[25,25,25], epoch=30000,delta_t=0.01,dimension=3):
     '''
     generates lorenz system states of a certain period
     input:
@@ -12,18 +12,22 @@ def lorenz(params=[10,28,8/3],init=[25,25,25], epoch=30000,delta_t=0.001,dimensi
         epoch - # of time slots to iterate
         delta_t - duration of each slot
         dimension - number of dims of vars 
-    output:
+    output:f = plt.figure()
+f.set_figwidth(4)
+f.set_figheight(1)
         result - list of tensors
     '''
     result = []
     result.append(init)
     '''
     discrete apprxm. for small dt:
-    x(t+dt)=x(t)+dt*(a*(y(t)-x(t)))
+    x(t+dt)=x(t)+dt*(a*(y(t)-x(t))f = plt.figure()
+f.set_figwidth(4)
+f.set_figheight(1))
     y(t+dt)=y(t)+dt*(x(t)*(b-z(t))-y(t))
     z(t+dt)=z(t)+dt*(x(t)*y(t)-c*z(t))
     '''
-    for i in range(1,epoch):
+    for i in range(0,epoch):
         prev = result[i-1]
         curr = [prev[0]+delta_t*(params[0]*(prev[1]-prev[0])),
                 prev[1]+delta_t*(prev[0]*(params[1]-prev[2])-prev[1]),
@@ -45,6 +49,9 @@ def plot(values,delta_t,dimension=3):
         for i in range(dimension):
             #print(i,d)
             data[i].append(d[i])
+    f = plt.figure()
+    f.set_figwidth(40)
+    f.set_figheight(10)
     plt.subplot(311)
     plt.plot(time,data[0])
     plt.subplot(312)
