@@ -9,24 +9,38 @@ class Reservoir:
         self.avg_degree = avg_degree
         self.adj,self.states = self.init_graph(rou,d_r,avg_degree)
 
-
-
-    def _init_graph(rou,d_r,avg_degree):
+    def init_graph(self,rou,d_r,avg_degree):
         states=np.zeros(d_r)
         adj=[]
         for i in range(d_r):
             connection=np.zeros(d_r)
-            degree = round(max(0,round(random.normal(avg_degree,avg_degree/3,1))))
+            degree = max(0,round(np.random.normal(avg_degree,avg_degree/3,1)[0]))
+            #print(i,degree)
             connected_idx = random.sample(range(d_r-1),degree)
+            #print(connected_idx)
             for idx in connected_idx:
-                connection[idx]=random.randrange(-1,1)
+                connection[idx]=random.uniform(-1,1)
             adj.append(connection)
-        max_eig=max(np.linalg.eig(adj)[0])
-        for i in range(avg_degree):
-            for j in range(avg_degree):
+
+        max_eig=np.abs(max(np.linalg.eig(adj)[0]))
+        for i in range(d_r):
+            for j in range(d_r):
                 adj[i][j]*=rou/max_eig
         return adj,states
     
     def update(self,feed):
         self.states += np.tanh(np.dot(self.adj,self.states))
     
+    def r_star(self):
+        r_star=[]
+        for i in range(len(self.states)):
+            if i%2 == 0:
+                r_star.append(self.states[i]*self.states[i])
+            else:
+                r_star.append(self.states[i])
+
+    def states(self):
+        return self.states
+    
+    def adj(self):
+        return self.adj

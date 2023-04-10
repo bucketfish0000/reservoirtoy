@@ -63,7 +63,7 @@ def plot(values,delta_t,dimension=3):
 def to_reservoir(w_in,input, in_dimension = 3, out_dimension = 500):
     return np.dot(w_in,input)
 
-def init_input_weight(sigma=0.15,in_dimension=3,out_dimension=500,):
+def init_input_weight(sigma=0.15,in_dimension=3,out_dimension=500):
     w_in = []
     for i in range(out_dimension):
         weight = np.zeros(in_dimension)
