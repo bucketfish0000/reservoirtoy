@@ -24,7 +24,6 @@ class output:
         prediction=self.out(torch.FloatTensor((res_feed)))
         loss = loss_fn(torch.FloatTensor(prediction),torch.FloatTensor(system_state_nxt))
         optimizer.zero_grad()
-        #loss.requires_grad=True
         loss.backward()
         optimizer.step()
         return prediction

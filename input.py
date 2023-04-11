@@ -3,7 +3,7 @@ import torch
 import random
 import matplotlib.pyplot as plt
 
-def lorenz(params=[10,28,8/3],init=[25,25,25], epoch=30000,delta_t=0.01,dimension=3):
+def lorenz(params=[10,28,8/3],init=[25,25,25], epoch=3000,delta_t=0.01,dimension=3):
     '''
     generates lorenz system states of a certain period
     input:
