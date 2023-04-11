@@ -12,10 +12,10 @@ def training_routine(system:list,cutoff:int,inputlyr:input.input,res:reservoir.R
     print("training")
     predictions=[]
     loss_fn = nn.MSELoss()
-    optimizer = torch.optim.SGD(params=outputlyr.out.parameters(),lr=lr)
+    optimizer = torch.optim.SGD(params=outputlyr.out.parameters(),lr=lr,weight_decay=0.002)
     for i in range(cutoff):
         system_state=system[i]
-        system_state_nxt=system[i+1]
+        system_state_nxt=torch.FloatTensor(system[i+1])
         feed_to_res = inputlyr.to_reservoir(system_state)
         res.update(feed_to_res)
         #prediction=outputlyr.train(res_feed=res.states,system_state_nxt=system_state_nxt,loss_fn=loss_fn,optimizer=optimizer)
@@ -23,8 +23,8 @@ def training_routine(system:list,cutoff:int,inputlyr:input.input,res:reservoir.R
         #moving training func to the loop instead of calling train()
         #commenting the following and uncomment line 21 makes call to train() which results in not 0-output but static output equal to the last output when training.
         ####
-        prediction=outputlyr.out(torch.FloatTensor((feed_to_res)))
-        loss = loss_fn(torch.FloatTensor(prediction),torch.FloatTensor(system_state_nxt))
+        prediction=torch.FloatTensor(outputlyr.out(torch.FloatTensor((feed_to_res))))
+        loss = loss_fn(prediction,system_state_nxt)
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
@@ -41,7 +41,7 @@ def predict_routine(prev_run:list,end:int,inputlyr:input.input,res:reservoir.Res
         res.update(feed_to_res)
         #prediction=outputlyr.predict(res_feed=res.states)
         with torch.no_grad():
-            prediction=outputlyr.out(torch.FloatTensor((feed_to_res)))
+            prediction=torch.FloatTensor(outputlyr.out(torch.FloatTensor((feed_to_res))))
         predictions.append(prediction.detach().numpy())
         last_pred=prediction
     #print(prev_run[-2],prev_run[-1],predictions[0])
@@ -52,7 +52,7 @@ def plot(values,delta_t,dimension=3):
     time=[]
     f = plt.figure()
     f.set_figwidth(40)
-    f.set_figheight(10)
+    f.set_figheight(20)
     for i in range(len(values[0])):
         time.append(t)
         t+=1

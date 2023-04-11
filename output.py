@@ -20,8 +20,6 @@ class output:
     def __init__(self,res_feed_dim=500,output_dim=3):
         self.out = outputLayer(res_feed_dim,output_dim)
         self.wout = np.random.rand(output_dim,res_feed_dim)
-        self.delta_wout = np.random.rand(output_dim,res_feed_dim)
-        self.delta_error = np.zeros(output_dim)
 
     def train(self,res_feed,system_state_nxt,loss_fn,optimizer):
         prediction=self.out(torch.FloatTensor((res_feed)))
@@ -34,12 +32,5 @@ class output:
         with torch.no_grad():
             prediction=self.out(torch.FloatTensor((res_feed)))
         return prediction
-    
-    def output(self,feed_res):
-        return np.dot(self.wout,feed_res)
-    
-    #def update_wout(self,error):
-    #
-    #    return None
     
     
