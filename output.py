@@ -9,7 +9,7 @@ class outputLayer(nn.Module):
     def __init__(self,res_feed_dim=500,output_dim=3):
         super().__init__()
         self.lin=nn.Sequential(
-            nn.Linear(res_feed_dim,output_dim)
+            nn.Linear(res_feed_dim,500)
         )
     
     def forward(self,x):

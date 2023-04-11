@@ -39,7 +39,9 @@ def predict_routine(prev_run:list,end:int,inputlyr:input.input,res:reservoir.Res
     for i in range(end):
         feed_to_res = inputlyr.to_reservoir(last_pred)
         res.update(feed_to_res)
-        prediction=outputlyr.predict(res_feed=res.states)
+        #prediction=outputlyr.predict(res_feed=res.states)
+        with torch.no_grad():
+            prediction=outputlyr.out(torch.FloatTensor((feed_to_res)))
         predictions.append(prediction.detach().numpy())
         last_pred=prediction
     #print(prev_run[-2],prev_run[-1],predictions[0])
