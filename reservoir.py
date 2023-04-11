@@ -3,12 +3,6 @@ import math
 import torch
 import random
 
-class RP:
-    def __init__(self,d_r=500,d_m=3,avg_deg=3,sigma=0.15,rou=0.4):
-        return None
-    
-
-
 class Reservoir:
     def __init__(self,rou=0.4,d_r=500,avg_degree = 3):
         self.d_r = d_r
@@ -35,10 +29,7 @@ class Reservoir:
         return adj,states
     
     def update(self,feed):
-        #print(self.states)
-        state_update = np.tanh(np.dot(self.adj,self.states))
-        #print("res:",state_update)
-        self.states += state_update
+        state_update += np.tanh(np.dot(self.adj,self.states)+feed)
     
     def r_star(self):
         r_star=[]
