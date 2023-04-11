@@ -60,13 +60,18 @@ def plot(values,delta_t,dimension=3):
     plt.plot(time,data[2])
     plt.show()
 
-def to_reservoir(w_in,input, in_dimension = 3, out_dimension = 500):
-    return np.dot(w_in,input)
+class input:
+    def __init__(self,sigma=0.15,in_dim=3,out_dim=500):
+        self.sigma,in_dim,out_dim = sigma,in_dim,out_dim
+        self.w_in = self.init_input_weight(sigma,in_dim,out_dim)
+        
+    def to_reservoir(self,input):
+        return np.dot(self.w_in,input)
 
-def init_input_weight(sigma=0.15,in_dimension=3,out_dimension=500):
-    w_in = []
-    for i in range(out_dimension):
-        weight = np.zeros(in_dimension)
-        weight[random.randint(0,2)]=random.uniform(-sigma,sigma)
-        w_in.append(weight)
-    return w_in
+    def init_input_weight(self,sigma=0.15,in_dimension=3,out_dimension=500):
+        w_in = []
+        for i in range(out_dimension):
+            weight = np.zeros(in_dimension)
+            weight[random.randint(0,2)]=random.uniform(-sigma,sigma)
+            w_in.append(weight)
+        return w_in
