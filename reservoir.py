@@ -10,7 +10,7 @@ class Reservoir:
         self.adj,self.states = self.init_graph(rou,d_r,avg_degree)
 
     def init_graph(self,rou,d_r,avg_degree):
-        states=np.zeros(d_r)
+        states=np.random.rand(d_r)
         adj=[]
         for i in range(d_r):
             connection=np.zeros(d_r)

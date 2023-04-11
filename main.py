@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 def training_routine(system:list,cutoff:int,inputlyr:input.input,res:reservoir.Reservoir,outputlyr:output.output,lr):
     print("training")
     predictions=[]
-    loss_fn = nn.L1Loss()
+    loss_fn = nn.MSELoss()
     optimizer = torch.optim.SGD(params=outputlyr.out.parameters(),lr=lr)
     for i in range(cutoff):
         system_state=system[i]
@@ -47,43 +47,30 @@ def predict_routine(prev_run:list,end:int,inputlyr:input.input,res:reservoir.Res
     #print(prev_run[-2],prev_run[-1],predictions[0])
     return predictions
 
-def plot(sys,out,delta_t,cutoff,dimension=3):
+def plot(values,delta_t,dimension=3):
     t = 0
     time=[]
     f = plt.figure()
     f.set_figwidth(40)
     f.set_figheight(10)
-    cutoff=(int)(round(cutoff))
-    #print("cutoff time","")
-    for i in range(len(sys)):
+    for i in range(len(values[0])):
         time.append(t)
         t+=1
-    plt.axvline(x=time[cutoff])
-    sysdata = []
-    for i in range(dimension):
-        sysdata.append([])   
-    for vect in sys:
+    
+    for seq in values:
+        data = []
         for i in range(dimension):
-            sysdata[i].append(vect[i])
-    plt.subplot(311)
-    plt.plot(time,sysdata[0],label="dynamic system")
-    plt.subplot(312)
-    plt.plot(time,sysdata[1],label="dynamic system")
-    plt.subplot(313)
-    plt.plot(time,sysdata[2],label="dynamic system")
-    outdata=[]    
-    for i in range(dimension):
-        outdata.append([])   
-    for vect in out:
-        for i in range(dimension):
-            outdata[i].append(vect[i])
-    plt.subplot(311)
-    plt.plot(time,outdata[0],label="model output")
-    plt.subplot(312)
-    plt.plot(time,outdata[1],label="model output")
-    plt.subplot(313)
-    plt.plot(time,outdata[2],label="model output")
-    plt.legend()
+            data.append([])   
+        for vect in seq:
+            for i in range(dimension):
+                data[i].append(vect[i])
+        plt.subplot(311)
+        plt.plot(time,data[0])
+        plt.subplot(312)
+        plt.plot(time,data[1])
+        plt.subplot(313)
+        plt.plot(time,data[2])
+    
     plt.show()
 
 def main(d_r,tp,lr):
@@ -103,5 +90,5 @@ def main(d_r,tp,lr):
     #print(prediction)
     whole = training_output+prediction
     print("doing plots")
-    plot(lor,whole,len(training_output),0.01,3)
-    return inputlyr,res,outputlyr,training_output,prediction
+    plot([lor,whole],0.01,3)
+    return inputlyr,res,outputlyr,training_output,prediction,lor
